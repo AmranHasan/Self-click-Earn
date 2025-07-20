@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Self Click Bot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    .btn {
+      background: #38bdf8;
+      border: none;
+      padding: 10px 20px;
+      color: #0f172a;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    #timer, #message, #continueBtn {
+      margin: 10px 0;
+      display: none;
+    }
+    @media only screen and (max-width: 768px) {
+      #adsrta-ad iframe {
+        width: 100% !important;
+        height: auto !important;
+      }
+    }
+    #supportButton {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #229ED9;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 30px;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      z-index: 1000;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      transition: background 0.3s ease;
+    }
+    #supportButton:hover {
+      background: #1c92cc;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>🤖 Self Click Bot</h2>
+  <p>Today’s Views: <span id="viewsLeft">30</span> Left</p>
+  <button class="btn" onclick="startAd()">▶️ Play Ad</button>
+
+  <div id="timer">⏳ Wait <span id="countdown">25</span>s</div>
+  <div id="continueBtn"><button class="btn" onclick="claimPoints()">✅ Continue</button></div>
+  <div id="message">✅ Ad Seen!</div>
+</div>
+
+<!-- ✅ New Ad Script -->
+<script src='//libtl.com/sdk.js' data-zone='9599902' data-sdk='show_9599902'></script>
+
+<script>
+  let today = new Date().toISOString().slice(0, 10);
+  let lastDate = localStorage.getItem("lastDate");
+  let viewsToday = parseInt(localStorage.getItem("viewsToday")) || 0;
+  const maxViews = 30;
+
+  if (lastDate !== today) {
+    viewsToday = 0;
+    localStorage.setItem("viewsToday", "0");
+    localStorage.setItem("lastDate", today);
+  }
+
+  function updateUI() {
+    document.getElementById("viewsLeft").innerText = maxViews - viewsToday;
+  }
+
+  updateUI();
+
+  function startAd() {
+    if (viewsToday >= maxViews) {
+      alert("🚫 Daily limit reached. Try again tomorrow.");
+      return;
+    }
+
+    document.getElementById("message").style.display = "none";
+    document.getElementById("timer").style.display = "block";
+    document.getElementById("continueBtn").style.display = "none";
+    document.getElementById("countdown").innerText = "25";
+
+    if (typeof show_9599902 === "function") {
+      show_9599902();
+    }
+
+    let sec = 25;
+    let interval = setInterval(() => {
+      sec--;
+      document.getElementById("countdown").innerText = sec;
+      if (sec <= 0) {
+        clearInterval(interval);
+        document.getElementById("continueBtn").style.display = "block";
+      }
+    }, 1000);
+  }
+
+  function claimPoints() {
+    document.getElementById("timer").style.display = "none";
+    document.getElementById("continueBtn").style.display = "none";
+    document.getElementById("message").style.display = "block";
+
+    viewsToday++;
+    localStorage.setItem("viewsToday", viewsToday);
+    localStorage.setItem("lastDate", today);
+    updateUI();
+  }
+</script>
+
+<!-- 🔗 Telegram Support -->
+<a href="https://t.me/EarningZone2026" target="_blank" id="supportButton" title="Join our Telegram">
+  <img src="https://img.icons8.com/ios-filled/30/ffffff/telegram.png" alt="Telegram Icon" style="vertical-align: middle; margin-right: 8px;" />
+  Support
+</a>
+
+</body>
+</html>
